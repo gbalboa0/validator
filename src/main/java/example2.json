@@ -1,0 +1,52 @@
+{
+  "Country": {
+    "Argentina": {
+      "Gender": {
+        "Hombre": {
+          "Age": {
+            "minAge": 26,
+            "maxAge": 50
+          }
+        },
+        "Mujer": {
+          "Age": {
+            "minAge": 18,
+            "maxAge": 45
+          }
+        }
+      }
+    },
+    "Brasil": {
+      "Gender": {
+        "Hombre": {
+          "Age": {
+            "minAge": 21,
+            "maxAge": 26
+          }
+        },
+        "Mujer": {
+          "Age": {
+            "minAge": 20,
+            "maxAge": 85
+          }
+        }
+      }
+    },
+    "Mexico": {
+      "Gender": {
+        "Hombre": {
+          "Age": {
+            "minAge": 26,
+            "maxAge": 50
+          }
+        },
+        "Mujer": {
+          "Age": {
+            "minAge": 18,
+            "maxAge": 45
+          }
+        }
+      }
+    }
+  }
+}
