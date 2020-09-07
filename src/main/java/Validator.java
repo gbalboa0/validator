@@ -2,12 +2,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.jetbrains.annotations.NotNull;
 import utils.NodeHelper;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static utils.NodeHelper.getNodeKeys;
 
 public abstract class Validator {
-	HashMap<String, Validator> nextValidators = new LinkedHashMap<>();
+	ConcurrentHashMap<String, Validator> nextValidators = new ConcurrentHashMap<>();
 
 	public Validator (JsonNode node) {
 		node.fields().forEachRemaining(this::createNextValidators);
@@ -19,8 +20,13 @@ public abstract class Validator {
 
 	public void createNextValidators (@NotNull Map.Entry<String, JsonNode> stringJsonNodeEntry) {
 		JsonNode node = stringJsonNodeEntry.getValue();
-		if (node.size() != 0)
-			nextValidators.put(stringJsonNodeEntry.getKey(), getNextValidator(NodeType(node), NodeHelper.getNextNode(node)));
+		List<String> keys = Arrays.asList(stringJsonNodeEntry.getKey().split("\\s*,\\s*"));
+		if (node.size() != 0) {
+			Validator nextValidator = getNextValidator(NodeType(node), NodeHelper.getNextNode(node));
+			keys.forEach(k -> {
+				nextValidators.put(k, nextValidator);
+			});
+		}
 	}
 
 	void updateValues (JsonNode node) {
@@ -28,15 +34,28 @@ public abstract class Validator {
 	}
 
 	protected void updateNextValidators(@NotNull Map.Entry<String, JsonNode> stringJsonNodeEntry) {
+		List<String> keys = getNodeKeys(stringJsonNodeEntry.getKey());
+		List<Validator> validatorsToUpdate = new ArrayList<>();
+
+
+		keys.forEach(key -> {
+			validatorsToUpdate.add(nextValidators.get(key));
+		});
+
+		updateValidators(validatorsToUpdate, stringJsonNodeEntry);
+	}
+
+	protected void updateValidators(List<Validator> validatorsToUpdate, Map.Entry<String, JsonNode> stringJsonNodeEntry){
 		JsonNode node = stringJsonNodeEntry.getValue();
-		Validator nextValidator = nextValidators.get(stringJsonNodeEntry.getKey());
 
 		if (node.size() != 0) {
-			if (nextValidator != null){
-				nextValidator.updateValues(NodeHelper.getNextNode(node));
-			} else {
-				createNextValidators(stringJsonNodeEntry);
-			}
+			validatorsToUpdate.forEach(nextValidator -> {
+				if (nextValidator != null){
+					nextValidator.updateValues(NodeHelper.getNextNode(node));
+				} else {
+					createNextValidators(stringJsonNodeEntry);
+				}
+			});
 		}
 	}
 

@@ -34,6 +34,7 @@ public class ValidatorTest {
 		Assert.assertEquals(results.get(5), false);
 		Assert.assertEquals(results.get(6), true);
 		Assert.assertEquals(results.get(7), true);
+		Assert.assertEquals(results.get(8), true);
 	}
 
 	@Test
@@ -68,6 +69,7 @@ public class ValidatorTest {
 		Assert.assertEquals(results.get(5), false);
 		Assert.assertEquals(results.get(6), true);
 		Assert.assertEquals(results.get(7), true);
+		Assert.assertEquals(results.get(8), true);
 
 		Assert.assertEquals(updateResults.get(1), false);
 		Assert.assertEquals(updateResults.get(2), false);
@@ -76,6 +78,7 @@ public class ValidatorTest {
 		Assert.assertEquals(updateResults.get(5), true);
 		Assert.assertEquals(updateResults.get(6), false);
 		Assert.assertEquals(updateResults.get(7), true);
+		Assert.assertEquals(updateResults.get(8), false);
 	}
 
 	public static List<Actor> getMockedActors() {
@@ -86,7 +89,8 @@ public class ValidatorTest {
 				new Actor(19, "Argentina", "Mujer"),
 				new Actor(65, "Brasil", "Mujer"),
 				new Actor(100, "Mexico", "Mujer"),
-				new Actor(27, "Mexico", "Hombre")
+				new Actor(27, "Mexico", "Hombre"),
+				new Actor(25, "Ecuador", "Hombre")
 		)){};
 	}
 }

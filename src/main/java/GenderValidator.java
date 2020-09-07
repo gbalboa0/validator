@@ -9,7 +9,6 @@ public class GenderValidator extends Validator {
 
 	public GenderValidator(JsonNode node) {
 		super(node);
-		//node.fields().forEachRemaining(this::createNextValidators);
 		node.fieldNames().forEachRemaining(e -> genders.add(e));
 	}
 
