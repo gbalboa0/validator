@@ -32,8 +32,8 @@ public class CountryValidator extends Validator {
 	@Override
 	protected void setValues(JsonNode node) {
 		countries.clear();
-		node.fieldNames().forEachRemaining(n -> {
-			countries.addAll(getNodeKeys(n));
+		node.get("values").elements().forEachRemaining(n -> {
+			countries.add(n.textValue());
 		});
 	}
 

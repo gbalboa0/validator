@@ -6,12 +6,33 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static utils.NodeHelper.getNodeKeys;
+import static utils.NodeHelper.getNodeType;
 
 public abstract class Validator {
 	ConcurrentHashMap<String, Validator> nextValidators = new ConcurrentHashMap<>();
 
 	public Validator (JsonNode node) {
-		node.fields().forEachRemaining(this::createNextValidators);
+		createNextValidators(node);
+		node.get("values").forEach(v -> createNextValidators(node.get("next")));
+		//node.get("next").fields().forEachRemaining(this::createNextValidators);
+	}
+
+	private void createNextValidators(JsonNode node) {
+		List<String> keys = new ArrayList<>();
+		node.get("values").elements().forEachRemaining(v -> keys.add(v.textValue()));
+
+		if (node.get("next") != null) {
+			List<Validator> nextValidatorsList = new ArrayList<>();
+			node.get("next").forEach(n -> {
+				nextValidatorsList.add(getNextValidator(NodeType(node), NodeHelper.getNextNode(node)));
+			});
+
+			keys.forEach(k -> {
+				nextValidatorsList.forEach( v -> {
+					nextValidators.put(k, v);
+				});
+			});
+		}
 	}
 
 	boolean evaluate(Actor actor){
@@ -80,6 +101,6 @@ public abstract class Validator {
 	}
 
 	public ValidatorType NodeType (JsonNode node) {
-		return ValidatorType.valueOf(node.fieldNames().next());
+		return ValidatorType.valueOf(node.fields().next().getValue().textValue());
 	}
 }

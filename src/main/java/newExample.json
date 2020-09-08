@@ -1,0 +1,34 @@
+{
+  "next":[
+    {
+      "type":"Country",
+      "values":[
+        "Argentina",
+        "Ecuador"
+      ],
+      "next":[
+        {
+          "type":"Gender",
+          "value":{
+            "gender":"Hombre"
+          },
+          "next":null
+        },
+        {
+          "type":"Gender",
+          "value":"Mujer",
+          "next":[
+            {
+              "type":"Age",
+              "value":{
+                "minAge":18,
+                "maxAge":45
+              },
+              "next":null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
