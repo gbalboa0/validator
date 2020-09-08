@@ -47,6 +47,22 @@
           }
         }
       }
+    },
+    "Uruguay": {
+      "Gender": {
+        "Hombre, Mujer": {
+          "Age": {
+            "minAge": 26,
+            "maxAge": 50
+          }
+        }
+      }
+    },
+    "Paraguay": {
+        "Age": {
+          "minAge": 26,
+          "maxAge": 50
+        }
     }
   }
 }

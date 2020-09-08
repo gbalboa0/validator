@@ -29,9 +29,16 @@ public abstract class Validator {
 		}
 	}
 
-	void updateValues (JsonNode node) {
-
+	public void updateValues (JsonNode node){
+		setValues(node);
+		clearOldValidators();
+		node.fields().forEachRemaining(this::updateNextValidators);
 	}
+
+	protected abstract void clearOldValidators();
+
+
+	protected abstract void setValues(JsonNode node);
 
 	protected void updateNextValidators(@NotNull Map.Entry<String, JsonNode> stringJsonNodeEntry) {
 		List<String> keys = getNodeKeys(stringJsonNodeEntry.getKey());

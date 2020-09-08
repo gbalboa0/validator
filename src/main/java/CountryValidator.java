@@ -1,11 +1,7 @@
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jetbrains.annotations.NotNull;
-import utils.NodeHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static utils.NodeHelper.getNodeKeys;
 
@@ -14,15 +10,15 @@ public class CountryValidator extends Validator {
 
 	CountryValidator(JsonNode node){
 		super(node);
-		setCountries(node);
+		setValues(node);
 	}
 
-	@Override
+	/*@Override
 	public void updateValues (JsonNode node){
-		setCountries(node);
-		clearOldValidators();
+		setValues(node);
+		clearOldValidators(countries);
 		node.fields().forEachRemaining(this::updateNextValidators);
-	}
+	}*/
 
 	@Override
 	public boolean evaluate(Actor actor) {
@@ -33,14 +29,16 @@ public class CountryValidator extends Validator {
 		return nextValidators.get(actor.country) == null || nextValidators.get(actor.country).evaluate(actor);
 	}
 
-	private void setCountries(JsonNode node) {
+	@Override
+	protected void setValues(JsonNode node) {
 		countries.clear();
 		node.fieldNames().forEachRemaining(n -> {
 			countries.addAll(getNodeKeys(n));
 		});
 	}
 
-	private void clearOldValidators() {
+	@Override
+	protected void clearOldValidators() {
 		nextValidators.keySet().forEach(k -> {
 			if(!countries.contains(k)){
 				nextValidators.remove(k);
